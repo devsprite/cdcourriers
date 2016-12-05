@@ -200,7 +200,7 @@ class Cdcourriers extends Module
 
     private function generatePDF()
     {
-        $pdf = new MYPDF('P', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+        $pdf = new MypdfClass('P', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 
         // set document information
         $pdf->SetCreator(PDF_CREATOR);
@@ -210,7 +210,7 @@ class Cdcourriers extends Module
 
         // remove default header/footer
         $pdf->setPrintHeader(false);
-        $pdf->setPrintFooter(true);
+        $pdf->setPrintFooter(false);
 
 
         // set default monospaced font
@@ -220,7 +220,7 @@ class Cdcourriers extends Module
         $pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
 
         // set auto page breaks
-        $pdf->SetAutoPageBreak(true, PDF_MARGIN_BOTTOM);
+        $pdf->SetAutoPageBreak(true, 10);
 
         // set image scale factor
         $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
@@ -235,13 +235,18 @@ class Cdcourriers extends Module
         // ---------------------------------------------------------
 
         // set font
-        $pdf->SetFont('dejavusans', 'BI', 20);
+        $pdf->SetFont('helvetica', '', 20);
         $pdf->SetMargins(7, 10, 7, true);
         // add a page
         $pdf->AddPage();
 
         // set some text to print
-        $html_content = $this->context->smarty->fetch(_PS_MODULE_DIR_ . 'cdcourriers/views/templates/hook/pdf/content.tpl');
+        $this->context->smarty->assign(array(
+            'path_img' => _PS_MODULE_DIR_ . 'cdcourriers/img/'
+        ));
+        $html_content = $this->context->smarty->fetch(_PS_MODULE_DIR_ . 'cdcourriers/views/templates/hook/pdf/header.tpl');
+        $html_content .= $this->context->smarty->fetch(_PS_MODULE_DIR_ . 'cdcourriers/views/templates/hook/pdf/relance.tpl');
+        $html_content .= $this->context->smarty->fetch(_PS_MODULE_DIR_ . 'cdcourriers/views/templates/hook/pdf/footer.tpl');
         $pdf->writeHTML($html_content);
 
         // ---------------------------------------------------------

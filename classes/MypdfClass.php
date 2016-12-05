@@ -34,7 +34,7 @@ class MypdfClass extends TCPDF
     public function footer()
     {
 // Position at 15 mm from bottom
-        $this->SetY(-15);
+        $this->SetY(-10);
 // Set font
         $this->SetFont('helvetica', 'I', 8);
 // Page number
