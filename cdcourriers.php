@@ -28,6 +28,7 @@ if (!defined('_PS_VERSION_'))
     exit;
 
 require_once(dirname(__FILE__) . '/classes/MypdfClass.php');
+require_once(dirname(__FILE__) . '/classes/CourriersClass.php');
 
 class Cdcourriers extends Module
 {
@@ -63,8 +64,9 @@ class Cdcourriers extends Module
 
     public function install()
     {
-        if (!parent::install() OR
-            !$this->_installConfig()
+        if (!parent::install() ||
+            !$this->_installConfig() ||
+            !$this->registerController()
         )
             return false;
         return true;
@@ -99,63 +101,14 @@ class Cdcourriers extends Module
 
     public function getContent()
     {
+        $this->_displayForm();
         return $this->_html;
     }
 
     private function _displayForm()
     {
-        $this->_html .= $this->_generateForm();
-        // With Template
-        $this->context->smarty->assign(array(
-            'variable' => 1
-        ));
-        $this->_html .= $this->display(__FILE__, 'backoffice.tpl');
+
     }
-
-    private function _generateForm()
-    {
-        $inputs = array();
-
-        $inputs[] = array(
-            'type' => 'textarea',
-            'label' => $this->l('Test Me'),
-            'name' => 'BAREBONELANG',
-            'desc' => 'Description',
-            'autoload_rte' => true,
-            'lang' => true
-        );
-
-
-        $fields_form = array(
-            'form' => array(
-                'legend' => array(
-                    'title' => $this->l('Settings'),
-                    'icon' => 'icon-cogs'
-                ),
-                'input' => $inputs,
-                'submit' => array(
-                    'title' => $this->l('Save'),
-                    'class' => 'btn btn-default pull-right',
-                    'name' => 'submitUpdate'
-                )
-            )
-        );
-
-
-        $lang = new Language((int)Configuration::get('PS_LANG_DEFAULT'));
-        $helper = new HelperForm();
-        $helper->default_form_language = $lang->id;
-        // $helper->submit_action = 'submitUpdate';
-        $helper->currentIndex = $this->context->link->getAdminLink('AdminModules', false) . '&configure=' . $this->name . '&tab_module=' . $this->tab . '&module_name=' . $this->name;
-        $helper->token = Tools::getAdminTokenLite('AdminModules');
-        $helper->tpl_vars = array(
-            'fields_value' => $this->getConfigFull(),
-            'languages' => $this->context->controller->getLanguages(),
-            'id_language' => $this->context->language->id
-        );
-        return $helper->generateForm(array($fields_form));
-    }
-
 
     private function _postProcess()
     {
@@ -268,4 +221,19 @@ class Cdcourriers extends Module
         $pdf->Output('courriers' . '.pdf', 'I');
     }
 
+    private function registerController()
+    {
+        $tab = new Tab();
+        $tab->active = 1;
+        $names = array(1 => 'AdminCourriers', 'AdminCourriers');
+        foreach (Language::getLanguages() as $language) {
+            $tab->name[$language['id_lang']] = isset($names[$language['id_lang']])
+                ? $names[$language['id_lang']] : $names[1];
+        }
+        $tab->class_name = 'AdminCourriers';
+        $tab->module = $this->name;
+        $tab->id_parent = -1;
+
+        return (bool)$tab->add();
+    }
 }

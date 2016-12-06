@@ -39,8 +39,19 @@ class CourriersClass
             $address = $customer->getAddresses($id_lang);
             CourriersClass::generatePDF($order, $customer, $address, $id_lang, $pdf);
         }
+        if (count($id_orders) > 1) {
+            $filename = date('Y-m-d_') . 'Relances' . '.pdf';
+            $fileNL = _PS_DOWNLOAD_DIR_ . $filename;
 
-        $pdf->Output('courriers' . '.pdf', 'I');
+            $pdf->Output($fileNL, 'F');
+            $pdf->Output($filename, 'D');
+        } else {
+            $filename = date('Y-m-d_') . 'Relance_' . $order->id . '_' . $customer->lastname . '.pdf';
+            $fileNL = _PS_DOWNLOAD_DIR_ . $filename;
+
+            $pdf->Output($fileNL, 'F');
+            $pdf->Output($filename, 'D');
+        }
     }
 
     private static function generatePDF(Order $order, Customer $customer, $address, $id_lang, MypdfClass $pdf)
