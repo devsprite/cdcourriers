@@ -40,13 +40,13 @@ class CourriersClass
             CourriersClass::generatePDF($order, $customer, $address, $id_lang, $pdf);
         }
         if (count($id_orders) > 1) {
-            $filename = date('Y-m-d_') . 'Relances' . '.pdf';
+            $filename = date('Y-m-d-U_') . 'Relances' . '.pdf';
             $fileNL = _PS_DOWNLOAD_DIR_ . $filename;
 
             $pdf->Output($fileNL, 'F');
             $pdf->Output($filename, 'D');
         } else {
-            $filename = date('Y-m-d_') . 'Relance_' . $order->id . '_' . $customer->lastname . '.pdf';
+            $filename = date('Y-m-d-U_') . 'Relance_' . $order->id . '_' . $customer->lastname . '.pdf';
             $fileNL = _PS_DOWNLOAD_DIR_ . $filename;
 
             $pdf->Output($fileNL, 'F');
@@ -54,7 +54,31 @@ class CourriersClass
         }
     }
 
-    private static function generatePDF(Order $order, Customer $customer, $address, $id_lang, MypdfClass $pdf)
+
+    public static function generateImpaye($id_order, $lrar, $id_lang)
+    {
+        $pdf = new MypdfClass('P', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+            $order = new Order($id_order);
+            $customer = new Customer($order->id_customer);
+            $address = $customer->getAddresses($id_lang);
+            CourriersClass::generatePDF($order, $customer, $address, $id_lang, $pdf, 'impaye', $lrar);
+
+            $filename = date('Y-m-d-U_') . 'Impaye_' . $order->id . '_' . $customer->lastname . '.pdf';
+            $fileNL = _PS_DOWNLOAD_DIR_ . $filename;
+
+            $pdf->Output($fileNL, 'F');
+            $pdf->Output($filename, 'D');
+    }
+
+    private static function generatePDF(
+        Order $order,
+        Customer $customer,
+        $address,
+        $id_lang,
+        MypdfClass $pdf,
+        $type = 'relance',
+        $lrar = 0
+    )
     {
 
         // set document information
@@ -106,32 +130,36 @@ class CourriersClass
             'order' => $order,
             'customer' => $customer,
             'address' => $address[0],
-            'gender' => $titles[$customer->id_gender]
+            'gender' => $titles[$customer->id_gender],
+            'lrar' => $lrar,
+            'total_paid' => Tools::displayPrice(($order->total_paid_tax_incl - $order->getTotalPaid())),
         ));
         // set some text to print
         // add a page
-        $pdf->AddPage();
-        $html_content = $smarty->fetch(_PS_MODULE_DIR_ . 'cdcourriers/views/templates/hook/pdf/header.tpl');
-        $html_content .= $smarty->fetch(_PS_MODULE_DIR_ . 'cdcourriers/views/templates/hook/pdf/relance.tpl');
-        $html_content .= $smarty->fetch(_PS_MODULE_DIR_ . 'cdcourriers/views/templates/hook/pdf/footer.tpl');
-        $pdf->writeHTML($html_content);
+        if ($type == 'relance') {
+            $pdf->AddPage();
+            $html_content = $smarty->fetch(_PS_MODULE_DIR_ . 'cdcourriers/views/templates/hook/pdf/header.tpl');
+            $html_content .= $smarty->fetch(_PS_MODULE_DIR_ . 'cdcourriers/views/templates/hook/pdf/relance.tpl');
+            $html_content .= $smarty->fetch(_PS_MODULE_DIR_ . 'cdcourriers/views/templates/hook/pdf/footer.tpl');
+            $pdf->writeHTML($html_content);
 
-//        $pdf->AddPage();
-//        $html_content = $smarty->fetch(_PS_MODULE_DIR_ . 'cdcourriers/views/templates/hook/pdf/header.tpl');
-//        $html_content .= $smarty->fetch(_PS_MODULE_DIR_ . 'cdcourriers/views/templates/hook/pdf/relance_verso.tpl');
-//        $html_content .= $smarty->fetch(_PS_MODULE_DIR_ . 'cdcourriers/views/templates/hook/pdf/footer.tpl');
-//        $pdf->writeHTML($html_content);
-//
-//        $pdf->AddPage();
-//        $html_content = $smarty->fetch(_PS_MODULE_DIR_ . 'cdcourriers/views/templates/hook/pdf/header.tpl');
-//        $html_content .= $smarty->fetch(_PS_MODULE_DIR_ . 'cdcourriers/views/templates/hook/pdf/impaye.tpl');
-//        $html_content .= $smarty->fetch(_PS_MODULE_DIR_ . 'cdcourriers/views/templates/hook/pdf/footer.tpl');
-//        $pdf->writeHTML($html_content);
-
+            $pdf->AddPage();
+            $html_content = $smarty->fetch(_PS_MODULE_DIR_ . 'cdcourriers/views/templates/hook/pdf/header.tpl');
+            $html_content .= $smarty->fetch(_PS_MODULE_DIR_ . 'cdcourriers/views/templates/hook/pdf/relance_verso.tpl');
+            $html_content .= $smarty->fetch(_PS_MODULE_DIR_ . 'cdcourriers/views/templates/hook/pdf/footer.tpl');
+            $pdf->writeHTML($html_content);
+        } else {
+            $pdf->AddPage();
+            $html_content = $smarty->fetch(_PS_MODULE_DIR_ . 'cdcourriers/views/templates/hook/pdf/header.tpl');
+            $html_content .= $smarty->fetch(_PS_MODULE_DIR_ . 'cdcourriers/views/templates/hook/pdf/impaye.tpl');
+            $html_content .= $smarty->fetch(_PS_MODULE_DIR_ . 'cdcourriers/views/templates/hook/pdf/footer.tpl');
+            $pdf->writeHTML($html_content);
+        }
 
         // ---------------------------------------------------------
 
         //Close and output PDF document
         return $pdf;
     }
+
 }

@@ -66,6 +66,7 @@ class Cdcourriers extends Module
     {
         if (!parent::install() ||
             !$this->_installConfig() ||
+            !$this->registerHook('DisplayBackOfficeHeader') ||
             !$this->registerController()
         )
             return false;
@@ -214,7 +215,6 @@ class Cdcourriers extends Module
         $pdf->writeHTML($html_content);
 
 
-
         // ---------------------------------------------------------
 
         //Close and output PDF document
@@ -235,5 +235,17 @@ class Cdcourriers extends Module
         $tab->id_parent = -1;
 
         return (bool)$tab->add();
+    }
+
+    public function hookDisplayBackOfficeHeader()
+    {
+        $this->context->controller->addJquery();
+        $this->context->controller->addJS($this->_path . 'views/dist/js/remodal.js', 'all');
+        $this->context->controller->addJS($this->_path . 'views/js/courriers.js', 'all');
+
+        $this->context->controller->addCSS($this->_path . 'views/dist/css/remodal.css', 'all');
+        $this->context->controller->addCSS($this->_path . 'views/dist/css/remodal-default-theme.css', 'all');
+
+        return true;
     }
 }

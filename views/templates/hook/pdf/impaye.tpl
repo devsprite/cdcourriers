@@ -5,13 +5,15 @@
 
                 <table style="font-size: 11pt; line-height: 1pt;text-align: justify">
                     <tr>
-                        <td style="width: 60%"></td>
-                        <td style="width: 40%;text-align: left;">
-                            <span style="font-weight: bold; font-size: 11pt;">M. Lopez Dominique</span>
+                        <td style="width: 50%"></td>
+                        <td style="width: 50%;text-align: left;">
+                            <span style="font-weight: bold; font-size: 11pt;">{$gender} {$customer->lastname|upper|escape:'htmlall':'UTF-8'}
+                                {$customer->firstname|lower|capitalize|escape:'htmlall':'UTF-8'}</span>
                             <br>
-                            <span>3, rue des lauriers roses</span>
+                            <span>{$address['address1']|strip|escape:'htmlall':'UTF-8'}</span>
                             <br>
-                            <span>34970 Lattes</span>
+                            {if !empty($address['address2'])}{$address['address2']|strip|escape:'htmlall':'UTF-8'}<br>{/if}
+                            <span>{$address['postcode']|strip|escape:'htmlall':'UTF-8'} {$address['city']|strip|lower|capitalize|escape:'htmlall':'UTF-8'}</span>
                         </td>
                     </tr>
                     <tr>
@@ -44,9 +46,9 @@
                         <td style="height: 25pt"></td>
                     </tr>
                     <tr>
-                        <td style="font-weight:bolder; font-size: 11pt;line-height: 1pt" colspan="2">LRAR N° 1A 031 822 7471 9
+                        <td style="font-weight:bolder; font-size: 11pt;line-height: 1pt" colspan="2">{if !empty($lrar)}LRAR N° {$lrar}
                             <br>+ copie en lettre simple
-                            <br>Dossier n° : 536
+                            <br>{/if}Dossier n° : {$order->id}
                             <br>Pièce jointe : copie de la facture
                         </td>
                     </tr>
@@ -54,21 +56,21 @@
                         <td style="height: 25pt"></td>
                     </tr>
                     <tr>
-                        <td colspan="2" style="line-height: 1pt">Montpellier le 6 décembre 2016</td>
+                        <td colspan="2" style="line-height: 1pt">Montpellier, le {$smarty.now|date_format:'%A %e %B %Y'|escape:'htmlall':'UTF-8'}.</td>
                     </tr>
                     <tr>
                         <td style="height: 12pt"></td>
                     </tr>
                     <tr>
-                        <td colspan="2" style="line-height: 1pt">M. Lopez,</td>
+                        <td colspan="2" style="line-height: 1pt">{$gender} {$customer->lastname|upper|escape:'htmlall':'UTF-8'},</td>
                     </tr>
                     <tr>
                         <td style="height: 12pt"></td>
                     </tr>
                     <tr>
                         <td colspan="2" style="line-height: 1pt">Nous constatons avec regret qu'en dépit de nos emails et courriers
-                            de relance vous n'avez toujours pas procédé au règlement de notre facture n° FA 00450 suite
-                            à votre commande n° 536 du 13 janvier 2012.<br>
+                            de relance vous n'avez toujours pas procédé au règlement de notre facture n° FA {$order->invoice_number}
+                            suite à votre commande n° {$order->id} du {$order->date_add|date_format:'%A %e %B %Y'|escape:'htmlall':'UTF-8'}.<br>
                         </td>
                     </tr>
                     <tr>
@@ -78,7 +80,7 @@
                     </tr>
                     <tr>
                         <td colspan="2" style="line-height: 1pt">En conséquence, nous vous mettons en demeure de nous régler la
-                            somme de 60,39 €, dans un délai de 48 heures à réception de la présente.<br>
+                            somme de {$total_paid}, dans un délai de 48 heures à réception de la présente.<br>
                         </td>
                     </tr>
                     <tr>
@@ -113,7 +115,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="2" style="line-height: 1pt">Veuillez agréer Mme, M l'expression de mes salutations
+                        <td colspan="2" style="line-height: 1pt">Veuillez agréer {$gender}, l'expression de mes salutations
                             distinguées. <br><br>
                         </td>
                     </tr>

@@ -45,11 +45,13 @@ class AdminCourriersController extends ModuleAdminController
 
     public function postProcess()
     {
-        if (Tools::isSubmit('relance') && Tools::getValue('relance') > 0)
-        {
+        if (Tools::isSubmit('relance') && Tools::getValue('relance') > 0) {
             CourriersClass::generateRelance(array((int)Tools::getValue('relance')), $this->context->employee->id_lang);
+        } else if (Tools::isSubmit('c_id_order') && Tools::getValue('c_id_order') > 0) {
+            $lrar = pSQL(Tools::getValue('c_lrar'));
+            CourriersClass::generateImpaye((int)Tools::getValue('c_id_order'), $lrar, $this->context->employee->id_lang);
         }
-        return parent::postProcess();
+
     }
 
 }
