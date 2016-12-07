@@ -41,7 +41,7 @@ class Cdcourriers extends Module
         'cdcourriers' => 1,
     );
 
-    protected $_config_lang = array(
+    protected $config_lang = array(
         'cdcourriers' => array()
     );
 
@@ -147,21 +147,30 @@ class Cdcourriers extends Module
         // set some text to print
         // add a page
         $pdf->AddPage();
-        $html_content = $this->context->smarty->fetch(_PS_MODULE_DIR_ . 'cdcourriers/views/templates/hook/pdf/header.tpl');
-        $html_content .= $this->context->smarty->fetch(_PS_MODULE_DIR_ . 'cdcourriers/views/templates/hook/pdf/relance.tpl');
-        $html_content .= $this->context->smarty->fetch(_PS_MODULE_DIR_ . 'cdcourriers/views/templates/hook/pdf/footer.tpl');
+        $html_content = $this->context->smarty->fetch(_PS_MODULE_DIR_
+            . 'cdcourriers/views/templates/hook/pdf/header.tpl');
+        $html_content .= $this->context->smarty->fetch(_PS_MODULE_DIR_
+            . 'cdcourriers/views/templates/hook/pdf/relance.tpl');
+        $html_content .= $this->context->smarty->fetch(_PS_MODULE_DIR_
+            . 'cdcourriers/views/templates/hook/pdf/footer.tpl');
         $pdf->writeHTML($html_content);
 
         $pdf->AddPage();
-        $html_content = $this->context->smarty->fetch(_PS_MODULE_DIR_ . 'cdcourriers/views/templates/hook/pdf/header.tpl');
-        $html_content .= $this->context->smarty->fetch(_PS_MODULE_DIR_ . 'cdcourriers/views/templates/hook/pdf/relance_verso.tpl');
-        $html_content .= $this->context->smarty->fetch(_PS_MODULE_DIR_ . 'cdcourriers/views/templates/hook/pdf/footer.tpl');
+        $html_content = $this->context->smarty->fetch(_PS_MODULE_DIR_
+            . 'cdcourriers/views/templates/hook/pdf/header.tpl');
+        $html_content .= $this->context->smarty->fetch(_PS_MODULE_DIR_
+            . 'cdcourriers/views/templates/hook/pdf/relance_verso.tpl');
+        $html_content .= $this->context->smarty->fetch(_PS_MODULE_DIR_
+            . 'cdcourriers/views/templates/hook/pdf/footer.tpl');
         $pdf->writeHTML($html_content);
 
         $pdf->AddPage();
-        $html_content = $this->context->smarty->fetch(_PS_MODULE_DIR_ . 'cdcourriers/views/templates/hook/pdf/header.tpl');
-        $html_content .= $this->context->smarty->fetch(_PS_MODULE_DIR_ . 'cdcourriers/views/templates/hook/pdf/impaye.tpl');
-        $html_content .= $this->context->smarty->fetch(_PS_MODULE_DIR_ . 'cdcourriers/views/templates/hook/pdf/footer.tpl');
+        $html_content = $this->context->smarty->fetch(_PS_MODULE_DIR_
+            . 'cdcourriers/views/templates/hook/pdf/header.tpl');
+        $html_content .= $this->context->smarty->fetch(_PS_MODULE_DIR_
+            . 'cdcourriers/views/templates/hook/pdf/impaye.tpl');
+        $html_content .= $this->context->smarty->fetch(_PS_MODULE_DIR_
+            . 'cdcourriers/views/templates/hook/pdf/footer.tpl');
         $pdf->writeHTML($html_content);
 
 
