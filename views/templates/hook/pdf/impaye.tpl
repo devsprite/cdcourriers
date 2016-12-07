@@ -67,7 +67,7 @@
                         </tr>
                     </table>
                     <tr>
-                        <td style="height: 25pt"></td>
+                        <td style="height: 20pt"></td>
                     </tr>
                     <tr>
                         <td style="font-weight:bolder; font-size: 11pt;line-height: 1pt" colspan="2">{if !empty($lrar)}LRAR N° {$lrar}
@@ -77,7 +77,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td style="height: 25pt"></td>
+                        <td style="height: 20pt"></td>
                     </tr>
                     <tr>
                         <td colspan="2" style="line-height: 1pt">Montpellier, le {$smarty.now|date_format:'%A %e %B %Y'|escape:'htmlall':'UTF-8'}.</td>

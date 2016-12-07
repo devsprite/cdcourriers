@@ -1,0 +1,60 @@
+# A faire manuellement
+
+ajouter le code suivant dans le fichier view.tpl situé dans le répertoire override.
+/prestashop/override/controllers/admin/templates/orders/helpers/view/view.tpl
+Retrouver ce bout de code, au alentour de la ligne 172.
+
+{if $order->hasInvoice()}
+    <a id="desc-order-partial_refund" class="btn btn-default" href="#refundForm">
+        <i class="icon-exchange"></i>
+        {l s='Partial refund'}
+    </a>
+{/if}
+
+Insérer celui-ci à la suite
+
+<!-- cdcourriers -->
+    <a class="btn btn-default" href="{$link->getAdminLink('AdminCourriers')|escape:'html':'UTF-8'}&relance={$order->id}">
+        <i class="icon-file"></i>
+        Relance
+    </a>
+    <a class="btn btn-default" href="#" data-remodal-target="c_modal">
+        <i class="icon-file"></i>
+        Impayé
+    </a>
+    <div class="remodal c_remodal" data-remodal-id="c_modal">
+        <button data-remodal-action="close" class="remodal-close"></button>
+        <h1>Numéro lettre recommandée</h1>
+        <form id="c_form" action="{$link->getAdminLink('AdminCourriers')}" method="post">
+            <input type="text" name="c_lrar" id="c_lrar" class="form-control" value="" title="Numéro lettre recommandée ">
+            <input type="hidden" name="c_id_order" id="c_id_order" value="{$order->id}">
+        <br>
+        <button data-remodal-action="cancel" class="remodal-cancel">Annuler</button>
+        <button type="submit" name="c_submit" id="c_submit" class="remodal-confirm">Envoyer</button>
+        </form>
+    </div>
+<!-- /cdcourriers -->
+
+Modifier le fichier AdminOrderController.php dans le fonction construct.
+/prestashop/controllers/admin/AdminOrdersController.php
+
+$this->bulk_actions = array(
+     'relance' => array('text' => ' Lettres de relance', 'icon' => 'icon-envelope'), // cdcourriers
+    'updateOrderStatus' => array('text' => $this->l('Change Order Status'), 'icon' => 'icon-refresh'),
+    'delete' => array(
+        'text' => $this->l('Supprimer la selection'),
+        'confirm' => $this->l('Voulez vous supprimer les commandes séléctionnées ?'),
+        'icon' => 'icon-trash'
+        ),
+);
+
+Modifier l'override du fichier AdminOrdersController.php en ajoutant la fonction suivante à la fin du fichier.
+/prestashop/override/controllers/admin/AdminOrdersController.php
+
+// cdcourriers
+protected function processBulkRelance(){
+    if (is_array($this->boxes) && !empty($this->boxes)){
+            require_once(dirname(__FILE__) . '/../../../modules/cdcourriers/classes/CourriersClass.php');
+            CourriersClass::generateRelance($this->boxes, $this->context->language->id);
+    }
+}
