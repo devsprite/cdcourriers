@@ -20,7 +20,7 @@
  *
  * @author    Dominique <dominique@chez-dominique.fr>
  * @copyright 2007-2016 Chez-dominique
- **/
+ */
 
 if (!defined('_PS_VERSION_')) {
     exit;
