@@ -34,10 +34,10 @@ require_once(dirname(__FILE__) . '/classes/CourriersClass.php');
 class Cdcourriers extends Module
 {
 
-    protected $_errors = array();
-    protected $_html = '';
+    protected $errors = array();
+    protected $html = '';
 
-    protected $_config = array(
+    protected $config = array(
         'cdcourriers' => 1,
     );
 
@@ -65,7 +65,7 @@ class Cdcourriers extends Module
     public function install()
     {
         if (!parent::install() ||
-            !$this->_installConfig() ||
+            !$this->installConfig() ||
             !$this->registerHook('DisplayBackOfficeHeader') ||
             !$this->registerController()
         ) {
@@ -77,25 +77,25 @@ class Cdcourriers extends Module
     public function uninstall()
     {
         if (!parent::uninstall() ||
-            !$this->_eraseConfig()
+            !$this->eraseConfig()
         ) {
             return false;
         }
         return true;
     }
 
-    private function _installConfig()
+    private function installConfig()
     {
-        foreach ($this->_config as $keyname => $value) {
+        foreach ($this->config as $keyname => $value) {
             Configuration::updateValue($keyname, $value);
         }
         return true;
     }
 
 
-    private function _eraseConfig()
+    private function eraseConfig()
     {
-        foreach ($this->_config as $keyname => $value) {
+        foreach ($this->config as $keyname => $value) {
             Configuration::deleteByName($keyname);
         }
         return true;
