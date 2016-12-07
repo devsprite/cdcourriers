@@ -20,6 +20,7 @@
  *
  * @author    Dominique <dominique@chez-dominique.fr>
  * @copyright 2007-2016 Chez-dominique
+ * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 
 if (!defined('_PS_VERSION_')) {
