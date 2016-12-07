@@ -38,6 +38,7 @@ class MypdfClass extends TCPDF
 // Set font
         $this->SetFont('helvetica', 'I', 8);
 // Page number
-        $this->Cell(0, 10, 'Page ' . $this->getAliasNumPage() . '/' . $this->getAliasNbPages(), 0, false, 'C', 0, '', 0, false, 'T', 'M');
+        $this->Cell(0, 10, 'Page ' . $this->getAliasNumPage() . '/' . $this->getAliasNbPages(), 0, false, 'C', 0, '', 0,
+            false, 'T', 'M');
     }
 }

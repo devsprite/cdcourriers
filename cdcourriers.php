@@ -44,12 +44,11 @@ class Cdcourriers extends Module
         'cdcourriers' => array()
     );
 
-
     public function __construct()
     {
         $this->name = 'cdcourriers';
         $this->tab = 'administration';
-        $this->version = '1.0';
+        $this->version = '1.0.0';
         $this->author = 'Dominique';
         $this->need_instance = 0;
 
@@ -68,17 +67,19 @@ class Cdcourriers extends Module
             !$this->_installConfig() ||
             !$this->registerHook('DisplayBackOfficeHeader') ||
             !$this->registerController()
-        )
+        ) {
             return false;
+        }
         return true;
     }
 
     public function uninstall()
     {
-        if (!parent::uninstall() OR
+        if (!parent::uninstall() ||
             !$this->_eraseConfig()
-        )
+        ) {
             return false;
+        }
         return true;
     }
 
@@ -97,58 +98,6 @@ class Cdcourriers extends Module
             Configuration::deleteByName($keyname);
         }
         return true;
-    }
-
-
-    public function getContent()
-    {
-        $this->_displayForm();
-        return $this->_html;
-    }
-
-    private function _displayForm()
-    {
-
-    }
-
-    private function _postProcess()
-    {
-        if (Tools::isSubmit('submitUpdate')) // handles the basic config update
-        {
-            // Do anything, like updating config
-
-            // Error handling
-            if ($this->_errors) {
-                $this->_html .= $this->displayError(implode($this->_errors, '<br />'));
-            } else $this->_html .= $this->displayConfirmation($this->l('Settings Updated!'));
-        }
-    }
-
-    public function getConfigFull()
-    {
-        // join lang and normal config
-        $config = $this->getConfig();
-        $config_lang = $this->getConfigLang();
-        return array_merge($config, $config_lang);
-    }
-
-    public function getConfig()
-    {
-        $config_keys = array_keys($this->_config);
-        return Configuration::getMultiple($config_keys);
-    }
-
-    public function getConfigLang($id_lang = false)
-    {
-        if (!$id_lang) {
-            foreach ($this->_config_lang as $key => $value) {
-                $results[$key] = Configuration::getInt($key);
-            }
-            return $results;
-        } else {
-            $config_keys = array_keys($this->_config_lang);
-            return Configuration::getMultiple($config_keys, $id_lang);
-        }
     }
 
     private function generatePDF()
@@ -240,11 +189,10 @@ class Cdcourriers extends Module
     public function hookDisplayBackOfficeHeader()
     {
         $this->context->controller->addJquery();
-        $this->context->controller->addJS($this->_path . 'views/dist/js/remodal.js', 'all');
+        $this->context->controller->addJS($this->_path . 'views/js/dist/remodal.js', 'all');
         $this->context->controller->addJS($this->_path . 'views/js/courriers.js', 'all');
-
-        $this->context->controller->addCSS($this->_path . 'views/dist/css/remodal.css', 'all');
-        $this->context->controller->addCSS($this->_path . 'views/dist/css/remodal-default-theme.css', 'all');
+        $this->context->controller->addCSS($this->_path . 'views/css/dist/remodal.css', 'all');
+        $this->context->controller->addCSS($this->_path . 'views/css/dist/remodal-default-theme.css', 'all');
 
         return true;
     }

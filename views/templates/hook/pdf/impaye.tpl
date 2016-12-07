@@ -1,3 +1,27 @@
+{**
+ * 2007-2016 PrestaShop
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@prestashop.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade PrestaShop to newer
+ * versions in the future. If you wish to customize PrestaShop for your
+ * needs please refer to http://www.prestashop.com for more information.
+ *
+ * @author    Dominique <dominique@chez-dominique.fr>
+ * @copyright 2007-2016 PrestaShop SA / 2011-2016 Dominique
+ * @license   http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ * International Registred Trademark & Property of PrestaShop SA
+ *}
 <div style="font-size: 10pt; color: #444">
     <table style="width: 100%">
         <tr>
@@ -7,7 +31,7 @@
                     <tr>
                         <td style="width: 50%"></td>
                         <td style="width: 50%;text-align: left;">
-                            <span style="font-weight: bold; font-size: 11pt;">{$gender} {$customer->lastname|upper|escape:'htmlall':'UTF-8'}
+                            <span style="font-weight: bold; font-size: 11pt;">{$gender|escape:'htmlall':'UTF-8'} {$customer->lastname|upper|escape:'htmlall':'UTF-8'}
                                 {$customer->firstname|lower|capitalize|escape:'htmlall':'UTF-8'}</span>
                             <br>
                             <span>{$address['address1']|strip|escape:'htmlall':'UTF-8'}</span>
@@ -62,15 +86,15 @@
                         <td style="height: 12pt"></td>
                     </tr>
                     <tr>
-                        <td colspan="2" style="line-height: 1pt">{$gender} {$customer->lastname|upper|escape:'htmlall':'UTF-8'},</td>
+                        <td colspan="2" style="line-height: 1pt">{$gender|escape:'htmlall':'UTF-8'} {$customer->lastname|upper|escape:'htmlall':'UTF-8'},</td>
                     </tr>
                     <tr>
                         <td style="height: 12pt"></td>
                     </tr>
                     <tr>
                         <td colspan="2" style="line-height: 1pt">Nous constatons avec regret qu'en dépit de nos emails et courriers
-                            de relance vous n'avez toujours pas procédé au règlement de notre facture n° FA {$order->invoice_number}
-                            suite à votre commande n° {$order->id} du {$order->date_add|date_format:'%A %e %B %Y'|escape:'htmlall':'UTF-8'}.<br>
+                            de relance vous n'avez toujours pas procédé au règlement de notre facture n° FA {$order->invoice_number|escape:'htmlall':'UTF-8'}
+                            suite à votre commande n° {$order->id|escape:'htmlall':'UTF-8'} du {$order->date_add|date_format:'%A %e %B %Y'|escape:'htmlall':'UTF-8'}.<br>
                         </td>
                     </tr>
                     <tr>
@@ -80,7 +104,7 @@
                     </tr>
                     <tr>
                         <td colspan="2" style="line-height: 1pt">En conséquence, nous vous mettons en demeure de nous régler la
-                            somme de {$total_paid}, dans un délai de 48 heures à réception de la présente.<br>
+                            somme de {$total_paid|escape:'htmlall':'UTF-8'}, dans un délai de 48 heures à réception de la présente.<br>
                         </td>
                     </tr>
                     <tr>
@@ -115,7 +139,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="2" style="line-height: 1pt">Veuillez agréer {$gender}, l'expression de mes salutations
+                        <td colspan="2" style="line-height: 1pt">Veuillez agréer {$gender|escape:'htmlall':'UTF-8'}, l'expression de mes salutations
                             distinguées. <br><br>
                         </td>
                     </tr>

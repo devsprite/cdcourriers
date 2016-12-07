@@ -78,8 +78,7 @@ class CourriersClass
         MypdfClass $pdf,
         $type = 'relance',
         $lrar = 0
-    )
-    {
+    ) {
 
         // set document information
         $pdf->SetCreator(PDF_CREATOR);
@@ -126,7 +125,7 @@ class CourriersClass
 
         $smarty = new Smarty();
         $smarty->assign(array(
-            'path_img' => _PS_MODULE_DIR_ . 'cdcourriers/img/',
+            'path_img' => _PS_MODULE_DIR_ . 'cdcourriers/views/img/',
             'order' => $order,
             'customer' => $customer,
             'address' => $address[0],
@@ -161,5 +160,4 @@ class CourriersClass
         //Close and output PDF document
         return $pdf;
     }
-
 }
