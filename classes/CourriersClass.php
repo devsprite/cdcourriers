@@ -59,16 +59,16 @@ class CourriersClass
     public static function generateImpaye($id_order, $lrar, $id_lang)
     {
         $pdf = new MypdfClass('P', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-            $order = new Order($id_order);
-            $customer = new Customer($order->id_customer);
-            $address = $customer->getAddresses($id_lang);
-            CourriersClass::generatePDF($order, $customer, $address, $id_lang, $pdf, 'impaye', $lrar);
+        $order = new Order($id_order);
+        $customer = new Customer($order->id_customer);
+        $address = $customer->getAddresses($id_lang);
+        CourriersClass::generatePDF($order, $customer, $address, $id_lang, $pdf, 'impaye', $lrar);
 
-            $filename = date('Y-m-d-U_') . 'Impaye_' . $order->id . '_' . $customer->lastname . '.pdf';
-            $fileNL = _PS_DOWNLOAD_DIR_ . $filename;
+        $filename = date('Y-m-d-U_') . 'Impaye_' . $order->id . '_' . $customer->lastname . '.pdf';
+        $fileNL = _PS_DOWNLOAD_DIR_ . $filename;
 
-            $pdf->Output($fileNL, 'F');
-            $pdf->Output($filename, 'D');
+        $pdf->Output($fileNL, 'F');
+        $pdf->Output($filename, 'D');
     }
 
     private static function generatePDF(
@@ -79,7 +79,8 @@ class CourriersClass
         MypdfClass $pdf,
         $type = 'relance',
         $lrar = 0
-    ) {
+    )
+    {
 
         // set document information
         $pdf->SetCreator(PDF_CREATOR);
@@ -154,11 +155,32 @@ class CourriersClass
             $html_content .= $smarty->fetch(_PS_MODULE_DIR_ . 'cdcourriers/views/templates/hook/pdf/impaye.tpl');
             $html_content .= $smarty->fetch(_PS_MODULE_DIR_ . 'cdcourriers/views/templates/hook/pdf/footer.tpl');
             $pdf->writeHTML($html_content);
+            $invoice = CourriersClass::generateInvoicePDFByIdOrder($order->id, $html_content);
         }
-
-        // ---------------------------------------------------------
-
         //Close and output PDF document
         return $pdf;
+    }
+
+    public static function generateInvoicePDFByIdOrder($id_order, $html_content)
+    {
+        $order = new Order((int)$id_order);
+        if (!Validate::isLoadedObject($order))
+            die(Tools::displayError('The order cannot be found within your database.'));
+
+        $order_invoice_list = $order->getInvoicesCollection();
+        CourriersClass::generateInvoicePDF($order_invoice_list, PDF::TEMPLATE_INVOICE, $html_content);
+    }
+
+    public static function generateInvoicePDF($object, $template, $html_content)
+    {
+        $pdf = new PDF($object, $template, Context::getContext()->smarty);
+        $pdf->pdf_renderer->SetAutoPageBreak(true, 10);
+        $pdf->pdf_renderer->setImageScale(PDF_IMAGE_SCALE_RATIO);
+        $pdf->pdf_renderer->SetFont('helvetica', '', 20);
+        $pdf->pdf_renderer->SetMargins(15, 10, 15, true);
+        $pdf->pdf_renderer->AddPage();
+        $pdf->pdf_renderer->writeHTML($html_content);
+        $pdf->pdf_renderer->deletePage(2);
+        $pdf->render();
     }
 }

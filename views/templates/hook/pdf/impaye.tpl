@@ -103,8 +103,8 @@
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="2" style="line-height: 1pt">En conséquence, nous vous mettons en demeure de nous régler la
-                            somme de {$total_paid|escape:'htmlall':'UTF-8'}, dans un délai de 48 heures à réception de la présente.<br>
+                        <td colspan="2" style="line-height: 1pt">En conséquence, nous vous <span style="font-weight: bold;">mettons en demeure</span> de nous régler la
+                            <span style="font-weight: bold;">somme de {$total_paid|escape:'htmlall':'UTF-8'}</span>, dans un délai de 48 heures à réception de la présente.<br>
                         </td>
                     </tr>
                     <tr>

@@ -62,13 +62,11 @@
                     </tr>
                     <tr>
                         <td colspan="2" style="line-height: 1pt">Mes précédants emails concernant le non paiement de
-                            votre commande sont resté
-                            sans réponse. <br>
+                            votre commande n° {$order->id|escape:'htmlall':'UTF-8'} du {$order->date_add|date_format:'%A %e %B %Y'|escape:'htmlall':'UTF-8'} sont resté sans réponse. <br>
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="2" style="line-height: 1pt">A ce jour, vous nous êtes toujours redevable du solde
-                            de votre commande. <br>
+                        <td colspan="2" style="line-height: 1pt">A ce jour, vous nous êtes toujours redevable de la somme de {$total_paid|escape:'htmlall':'UTF-8'}<br>
                         </td>
                     </tr>
                     <tr>
