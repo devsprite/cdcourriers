@@ -66,7 +66,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="2" style="line-height: 1pt">A ce jour, vous nous êtes toujours redevable de la somme de {$total_paid|escape:'htmlall':'UTF-8'}<br>
+                        <td colspan="2" style="line-height: 1pt">A ce jour, vous nous êtes toujours redevable <span style="font-weight: bold;">de la somme de {$total_paid|escape:'htmlall':'UTF-8'}</span><br>
                         </td>
                     </tr>
                     <tr>
