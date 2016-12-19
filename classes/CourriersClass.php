@@ -28,6 +28,7 @@ if (!defined('_PS_VERSION_')) {
 }
 
 require_once(dirname(__FILE__) . '/MypdfClass.php');
+require_once(dirname(__FILE__) . '/PDFCustom.php');
 
 class CourriersClass
 {
@@ -149,13 +150,17 @@ class CourriersClass
             $html_content .= $smarty->fetch(_PS_MODULE_DIR_ . 'cdcourriers/views/templates/hook/pdf/relance_verso.tpl');
             $html_content .= $smarty->fetch(_PS_MODULE_DIR_ . 'cdcourriers/views/templates/hook/pdf/footer.tpl');
             $pdf->writeHTML($html_content);
+            $pdf->AddPage();
+            $pdf->writeHTML(CourriersClass::generateInvoicePDFByIdOrder($order->id, $html_content));
         } else {
             $pdf->AddPage();
             $html_content = $smarty->fetch(_PS_MODULE_DIR_ . 'cdcourriers/views/templates/hook/pdf/header.tpl');
             $html_content .= $smarty->fetch(_PS_MODULE_DIR_ . 'cdcourriers/views/templates/hook/pdf/impaye.tpl');
             $html_content .= $smarty->fetch(_PS_MODULE_DIR_ . 'cdcourriers/views/templates/hook/pdf/footer.tpl');
             $pdf->writeHTML($html_content);
-            $invoice = CourriersClass::generateInvoicePDFByIdOrder($order->id, $html_content);
+            $pdf->AddPage();
+
+            $pdf->writeHTML(CourriersClass::generateInvoicePDFByIdOrder($order->id, $html_content));
         }
         //Close and output PDF document
         return $pdf;
@@ -168,19 +173,12 @@ class CourriersClass
             die(Tools::displayError('The order cannot be found within your database.'));
 
         $order_invoice_list = $order->getInvoicesCollection();
-        CourriersClass::generateInvoicePDF($order_invoice_list, PDF::TEMPLATE_INVOICE, $html_content);
+        return CourriersClass::generateInvoicePDF($order_invoice_list, PDF::TEMPLATE_INVOICE, $html_content);
     }
 
     public static function generateInvoicePDF($object, $template, $html_content)
     {
-        $pdf = new PDF($object, $template, Context::getContext()->smarty);
-        $pdf->pdf_renderer->SetAutoPageBreak(true, 10);
-        $pdf->pdf_renderer->setImageScale(PDF_IMAGE_SCALE_RATIO);
-        $pdf->pdf_renderer->SetFont('helvetica', '', 20);
-        $pdf->pdf_renderer->SetMargins(15, 10, 15, true);
-        $pdf->pdf_renderer->AddPage();
-        $pdf->pdf_renderer->writeHTML($html_content);
-        $pdf->pdf_renderer->deletePage(2);
-        $pdf->render();
+        $pdf = new PDFCustom($object, $template, Context::getContext()->smarty);
+        return $pdf->render();
     }
 }
